@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .container {
+            margin: auto;
+            width: 600px;
+            height: 450px;
+            display: grid;
+            place-content: center;
+            background-color: tomato;
+        }
+        table {
+            border-collapse: collapse;
+        }
+
+        td {
+            width: 50px;
+            height: 50px;
+            border: 1px solid black;
+            text-align: center;
+            color: white;
+            font-size: 24px;
+        }
+    </style>
+    <body>
+        <header><h2>Tic-Tac-Toe Games</h2></header>
+        <div class="container">
+            <p>CURRENT PLAYER : <span id="player"></span></p>
+            <table>
+                <tr>
+                    <td class="box" id="k0" onclick="choose(0)"></td>
+                    <td class="box" id="k1" onclick="choose(1)"></td>
+                    <td class="box" id="k2" onclick="choose(2)"></td>
+                </tr>
+                <tr>
+                    <td class="box" id="k3" onclick="choose(3)"></td>
+                    <td class="box" id="k4" onclick="choose(4)"></td>
+                    <td class="box" id="k5" onclick="choose(5)"></td>
+                </tr>
+                <tr>
+                    <td class="box" id="k6" onclick="choose(6)"></td>
+                    <td class="box" id="k7" onclick="choose(7)"></td>
+                    <td class="box" id="k8" onclick="choose(8)"></td>
+                </tr>
+            </table>
+            <button onclick="playAgain()" class="btn-playAgain">
+                Play Again
+            </button>
+            <button onclick="restartGame()" class="btn-playAgain">
+                Restart
+            </button>
+            <p>THE WINNER : <span id="wins"></span></p>
+            <p>Player 1: <span id="xWins"></span></p>
+            <p>Player 2: <span id="oWins"></span></p>
+        </div>
+
+        <script>
+            // Membuat variable game
+            var player = 0;
+            var player_name = ["X", "O"];
+            var draw = 0;
+            var boxes = ["", "", "", "", "", "", "", "", ""];
+            var gameEnded = false;
+
+            var xWins = 0;
+            var oWins = 0;
+            // function choose box
+            function choose(box_index) {
+                // game end masih bernilai false maka kotak yang kosong masih bisa diisi
+                if (gameEnded) {
+                    return;
+                }
+                // variabel untuk semua kotak
+                var element = document.getElementById("k" + box_index);
+                // jika kotak masih ada yang kosong, maka functionnya akan dikembalikan
+                if (element.textContent != "") {
+                    return;
+                }
+                // konten yang diisi sesuai dengan nilai array player_name
+                element.textContent = player_name[player];
+                //
+                boxes[box_index] = player_name[player];
+                draw += 1;
+                // array winner
+                var win = [
+                    [0, 1, 2],
+                    [3, 4, 5],
+                    [6, 7, 8],
+                    [0, 3, 6],
+                    [1, 4, 7],
+                    [2, 5, 8],
+                    [0, 4, 8],
+                    [2, 4, 6],
+                ];
+
+                for (let i of win) {
+                    if (
+                        boxes[i[0]] == player_name[player] &&
+                        boxes[i[1]] == player_name[player] &&
+                        boxes[i[2]] == player_name[player]
+                    ) {
+                        if (player_name[player] === "X") {
+                            xWins++;
+                            document.getElementById("xWins").innerHTML = xWins;
+                        } else {
+                            oWins++;
+                            document.getElementById("oWins").innerHTML = oWins;
+                        }
+                        document.getElementById("wins").innerHTML = player_name[player] + " wins!";
+                        gameEnded = true;
+                        return;
+                    }
+                }
+
+                if (draw == boxes.length) {
+                    document.getElementById("wins").innerHTML = "Draw";
+                    gameEnded = true;
+                    return;
+                }
+
+                player = 1 - player;
+                document.getElementById("player").textContent =
+                    player_name[player];
+            }
+            // Play again
+            function playAgain() {
+                var cells = document.getElementsByClassName("box");
+                for (var i = 0; i < cells.length; i++) {
+                    cells[i].textContent = "";
+                }
+                document.getElementById("wins").innerHTML = "";
+                gameEnded = false;
+                draw = 0;
+                boxes = ["", "", "", "", "", "", "", "", ""];
+                player = 0;
+                document.getElementById("player").textContent =
+                    player_name[player];
+            }
+
+            // restart game
+            function restartGame() {
+                var cells = document.getElementsByClassName("box");
+                for (var i = 0; i < cells.length; i++) {
+                    cells[i].textContent = "";
+                }
+                document.getElementById("wins").innerHTML = "";
+                gameEnded = false;
+                draw = 0;
+                boxes = ["", "", "", "", "", "", "", "", ""];
+                player = 0;
+                document.getElementById("player").textContent =
+                    player_name[player];
+                //count win Player
+                xWins = 0;
+                oWins = 0;
+                document.getElementById("xWins").innerHTML = "";
+                document.getElementById("oWins").innerHTML = "";
+            }
+            // Initialize player's turn display
+            document.getElementById("player").textContent = player_name[player];
+        </script>
+    </body>
+</html>
